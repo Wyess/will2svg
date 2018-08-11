@@ -169,7 +169,7 @@ def protobuf2yaml(data):
 def will2yaml(will_filename):
     data = array('B')
     with ZipFile(will_filename) as will:
-        r = re.compile("sections/media/[a-zA-Z0-9]+.protobuf")
+        r = re.compile("sections/media/.+.protobuf")
         strokes_protobuf = list(filter(r.match, will.namelist()))[0]
         info = will.getinfo(strokes_protobuf)
         with will.open(strokes_protobuf) as protobuf:
