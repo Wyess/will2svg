@@ -1,3 +1,10 @@
 # WILL files (Wacom Ink Layer)
 *.will
 *.WILL
+
+*.DS_Store
+
+# SVG files
+*.svg
+*.SVG
+
