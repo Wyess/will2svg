@@ -169,12 +169,32 @@ def protobuf2yaml(data):
 def will2yaml(will_filename):
     data = array('B')
     with ZipFile(will_filename) as will:
-        r = re.compile("sections/media/.+.protobuf")
+        r = re.compile("sections/media/.+\.protobuf")
         strokes_protobuf = list(filter(r.match, will.namelist()))[0]
         info = will.getinfo(strokes_protobuf)
         with will.open(strokes_protobuf) as protobuf:
             data.fromfile(protobuf, info.file_size)
             return protobuf2yaml(data)
+
+def get_page_size(will_filename):
+    w, h = 0, 0
+    with ZipFile(will_filename) as will:
+        r = re.compile("sections/section.*\.svg")
+        section_svg = list(filter(r.match, will.namelist()))[0]
+        with will.open(section_svg, 'r') as section:
+            rw = re.compile('width="([0-9.]+)"')
+            rh = re.compile('height="([0-9.]+)"')
+            for line in section:
+                mw = rw.search(line.decode('utf-8'))
+                mh = rh.search(line.decode('utf-8'))
+                if mw:
+                    w = mw.group(1)
+                if mh:
+                    h = mh.group(1)
+                if w != 0 and h != 0:
+                    break
+            
+    return w, h
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
