@@ -178,23 +178,28 @@ def will2yaml(will_filename):
 
 def get_page_size(will_filename):
     w, h = 0, 0
+    mat = None
     with ZipFile(will_filename) as will:
         r = re.compile("sections/section.*\.svg")
         section_svg = list(filter(r.match, will.namelist()))[0]
         with will.open(section_svg, 'r') as section:
             rw = re.compile('width="([0-9.]+)"')
             rh = re.compile('height="([0-9.]+)"')
+            rt = re.compile('transform="matrix\(([-0-9.]+ [-0-9.]+ [-0-9.]+ [-0-9.]+ [-0-9.]+ [-0-9.]+)\)"');
             for line in section:
-                mw = rw.search(line.decode('utf-8'))
-                mh = rh.search(line.decode('utf-8'))
+                line_utf8 = line.decode('utf-8')
+                mw = rw.search(line_utf8)
+                mh = rh.search(line_utf8)
+                mt = rt.search(line_utf8)
                 if mw:
                     w = mw.group(1)
                 if mh:
                     h = mh.group(1)
-                if w != 0 and h != 0:
+                if mt:
+                    mat = mt.group(1)
+                if w != 0 and h != 0 and mat is not None :
                     break
-            
-    return w, h
+    return w, h, mat
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:

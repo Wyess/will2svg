@@ -17,10 +17,10 @@ else:
     #if len(sys.argv) == 2:
     #    print(yaml2svg(yaml_filename = temp.name))
     #else:
-    w, h = get_page_size(sys.argv[1])
+    w, h, mat = get_page_size(sys.argv[1])
     outfile =os.path.splitext(sys.argv[1])[0] + '.svg'
     f = open(outfile, 'w')
-    f.write(yaml2svg(yaml_filename = temp.name, width = w, height = h))
+    f.write(yaml2svg(yaml_filename = temp.name, width = w, height = h, matrix = mat))
     f.close()
 
     os.unlink(temp.name)
