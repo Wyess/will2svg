@@ -144,9 +144,9 @@ def protobuf2yaml(data):
                     i += size
                 elif tag == 'strokePaint':
                     yaml += 'strokePaint: \n'
-                    size, di = __load_variant(data[i + 1:])
+                    strokePaint, di = __load_variant(data[i + 1:])
                     i += 1 + di
-                    i += size
+                    yaml += "  - {0}\n".format(strokePaint)
                 elif tag == 'strokeParticlesRandomSeed':
                     yaml += 'strokeParticlesRandomSeed: \n'
                     size, di = __load_variant(data[i + 1:])
